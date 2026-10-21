@@ -1,0 +1,11 @@
+## Interface: 30300
+## Title: EnhaPrio Rebuffed
+## Notes: Enhancement shaman priority for Whitemane / Frostmourne Rebuffed (based on EnhaPrio by Stormcast)
+## Author: based on EnhaPrio by Stormcast
+## Version: 1.0.0
+## SavedVariables: EnhaPrioDB
+## OptionalDeps: ButtonFacade
+
+embeds.xml
+Engine.lua
+Core.lua
