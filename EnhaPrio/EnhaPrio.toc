@@ -2,7 +2,7 @@
 ## Title: EnhaPrio Rebuffed
 ## Notes: Enhancement shaman priority for Whitemane / Frostmourne Rebuffed (based on EnhaPrio by Stormcast)
 ## Author: based on EnhaPrio by Stormcast
-## Version: 1.0.0
+## Version: 1.0.1
 ## SavedVariables: EnhaPrioDB
 ## OptionalDeps: ButtonFacade
 

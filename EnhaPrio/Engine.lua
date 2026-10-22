@@ -126,7 +126,7 @@ function E.nextAction(st, prio, limit)
 		if st.now >= st.gcdEnd then
 			for _, tok in ipairs(prio) do
 				local r = E.RULES[tok]
-				if r and r.ok(st) and (r.ignoreCd or ready(st, r.key)) then
+				if r and r.ok(st) and not (st.disrupted and castTime(st, r.key) > 0) and (r.ignoreCd or ready(st, r.key)) then
 					return tok, r.key, st.now - start
 				end
 			end
@@ -219,7 +219,7 @@ local learnedCd, learnedGcd, maxLs, lastLvbCast = {}, nil, nil, nil
 
 local function spellName(key) return (GetSpellInfo(E.ID[key])) end
 
-local function auraById(unit, filter, ids)
+local function auraById(unit, filter, ids, anyCaster)
 	for i = 1, 40 do
 		local name, _, _, count, _, _, expires, caster, _, _, spellId
 		if filter == "HELPFUL" then
@@ -228,7 +228,7 @@ local function auraById(unit, filter, ids)
 			name, _, _, count, _, _, expires, caster, _, _, spellId = UnitDebuff(unit, i)
 		end
 		if not name then break end
-		if ids[spellId] and (caster == "player" or caster == nil) then
+		if ids[spellId] and (anyCaster or caster == "player" or caster == nil) then
 			return expires or 0, count or 0
 		end
 	end
@@ -241,6 +241,7 @@ local FS_IDS = { [49233] = true, [49232] = true, [29228] = true, [25457] = true 
 local SS_IDS = { [17364] = true }
 local FE_IDS = { [2894] = true }
 local SURGE_IDS = { [E.ID.SURGE] = true }
+local DISRUPT_IDS = { [29310] = true, [9250696] = true }
 
 local function spellCooldown(key)
 	local name = GetSpellInfo(E.ID[key])
@@ -275,6 +276,7 @@ function E.snapshot(now)
 	local clBase = (clMs and clMs > 0) and clMs / 1000 / (1 - 0.2 * math.min(st.mw, 4)) or E.DEFAULT.clCast
 	st.clCast = st.mw >= 5 and E.DEFAULT.clCast * (st.gcd / 1.5) or clBase
 	st.surgeExp = auraById("player", "HELPFUL", SURGE_IDS)
+	st.disrupted = auraById("player", "HARMFUL", DISRUPT_IDS, true) > now
 	local _, _, _, _, _, _, lvbMs = GetSpellInfo(E.ID.LVB)
 	if lvbMs and lvbMs > 0 then lastLvbCast = lvbMs / 1000 end
 	st.lvbCast = lastLvbCast or E.DEFAULT.lvbCast * (st.gcd / 1.5)

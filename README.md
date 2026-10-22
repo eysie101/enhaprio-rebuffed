@@ -1,6 +1,10 @@
 # EnhaPrio Rebuffed
 
-Version 1.0.0
+Version 1.0.1
+
+## Changes
+
+- 1.0.1: During Spell Disruption (Heigan the Unclean) and Disciplinary Shout (Instructor Razuvious) no hardcasts are shown.
 
 EnhaPrio Rebuffed shows the enhancement shaman priority for Whitemane / Frostmourne Rebuffed (WoW 3.3.5a). It is
 based on EnhaPrio 1.1.1 by Stormcast.
